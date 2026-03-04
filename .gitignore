@@ -2,6 +2,7 @@ venv/
 credentials/
 *.json
 data/output/*
+!data/output/.gitkeep
 __pycache__/
 *.pyc
 .env

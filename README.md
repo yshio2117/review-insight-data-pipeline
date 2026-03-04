@@ -1,18 +1,23 @@
-# Negative Review Reason Extraction Pipeline (Rule-based) + BigQuery + Looker Studio
+# Review Insight Data Pipeline
+
+A lightweight DataOps-style pipeline for extracting negative review reasons using rule-based NLP, storing results in BigQuery, and visualizing KPIs in Looker Studio.
 
 ## Overview
-This project builds a minimal DataOps-style pipeline to:
-1) load negative reviews(e.g.,reviews in a hotel) from CSV,
-2) extract negative reasons (subject/predicate) using rule-based NLP in Python,
-3) store results in BigQuery,
-4) visualize KPIs and top negative reasons in Looker Studio.
+This project:
 
-**Note:** Reviews are currently in Japanese, but the pipeline is language-independent. The same approach works for English or German datasets.
+1. Loads negative reviews (e.g., hotel reviews) from CSV  
+2. Extracts negative reasons (subject–predicate pairs) using rule-based NLP in Python  
+3. Stores the processed results in BigQuery  
+4. Visualizes KPIs and negative reasons in Looker Studio  
+
+**Note:** Reviews are currently in Japanese; however, the pipeline is language-independent and can be applied to English or German datasets.
 
 ## Demo / Output
-- Looker Studio dashboard: <link>
-- Example output table (BigQuery): `project.dataset.review_reasons`
-- Screenshots: `docs/` (optional)
+
+- [Output PDF](docs/Report_on_Negative_Review_Reasons.pdf)
+- [Looker Studio dashboard](https://lookerstudio.google.com/reporting/a6186eaf-dfec-409e-91ba-79826297d478)
+
+
 
 ## Architecture
 CSV → Python (cleaning + rule-based extraction + validation) → BigQuery → Looker Studio
@@ -141,8 +146,8 @@ Note: Records that do not pass the quality check are flagged as `is_valid = Fals
 
 
 ## Dashboard (Looker Studio)
-- Sample pdf Report (dummy reviews for a hotel) is available at: `docs/Report_on_Negative_Review_Reasons.pdf`.
-- Dashboard link: https://lookerstudio.google.com/reporting/a6186eaf-dfec-409e-91ba-79826297d478
+- Sample pdf Report (dummy reviews for a hotel) is available here: `docs/Report_on_Negative_Review_Reasons.pdf`.
+- [Dashboard link](https://lookerstudio.google.com/reporting/a6186eaf-dfec-409e-91ba-79826297d478)
 
 
 ### Page 1: Data Quality / Pipeline Health
@@ -157,7 +162,7 @@ Allows filtering by run and drilling down to validated records and extracted rea
 
 
 ## Repo Structure
-
+```text
 .
 ├── README.md
 ├── config
@@ -196,7 +201,7 @@ Allows filtering by run and drilling down to validated records and extracted rea
 │       ├── transformation   # Data transformation
 │       └── validation       # Data quality validation
 ├── tests
-
+```
 
 
 ## Setup
