@@ -1,0 +1,266 @@
+term,language,entity,version
+部屋,ja,Room,1
+客室,ja,Room,1
+室内,ja,Room,1
+部屋内,ja,Room,1
+壁,ja,Room,1
+壁紙,ja,Room,1
+浴室,ja,Bathroom & Water,1
+バスルーム,ja,Bathroom & Water,1
+風呂,ja,Bathroom & Water,1
+お風呂,ja,Bathroom & Water,1
+シャワー,ja,Bathroom & Water,1
+トイレ,ja,Bathroom & Water,1
+洗面台,ja,Bathroom & Water,1
+洗面所,ja,Bathroom & Water,1
+ベッド,ja,Bedding,1
+布団,ja,Bedding,1
+枕,ja,Bedding,1
+エアコン,ja,Air Conditioning,1
+空調,ja,Air Conditioning,1
+暖房,ja,Air Conditioning,1
+冷房,ja,Air Conditioning,1
+テレビ,ja,In-room Facilities,1
+冷蔵庫,ja,In-room Facilities,1
+金庫,ja,In-room Facilities,1
+ドライヤー,ja,In-room Facilities,1
+アメニティ,ja,In-room Facilities,1
+スタッフ,ja,Staff Service,1
+対応,ja,Staff Service,1
+受付,ja,Staff Service,1
+従業員,ja,Staff Service,1
+店員,ja,Staff Service,1
+フロント,ja,Staff Service,1
+コンシェルジュ,ja,Staff Service,1
+朝食,ja,Food & Beverage,1
+夕食,ja,Food & Beverage,1
+食事,ja,Food & Beverage,1
+レストラン,ja,Food & Beverage,1
+料理,ja,Food & Beverage,1
+メニュー,ja,Food & Beverage,1
+ロビー,ja,Facilities,1
+エレベーター,ja,Facilities,1
+設備,ja,Facilities,1
+自販機,ja,Facilities,1
+自動販売機,ja,Facilities,1
+大浴場,ja,Facilities,1
+温泉,ja,Facilities,1
+ジム,ja,Facilities,1
+プール,ja,Facilities,1
+車,ja,Transportation,1
+バス,ja,Transportation,1
+移動,ja,Transportation,1
+運転,ja,Transportation,1
+駐車場,ja,Transportation,1
+立地,ja,Location,1
+場所,ja,Location,1
+周辺,ja,Location,1
+アクセス,ja,Location,1
+駅,ja,Location,1
+予約,ja,Booking Process,1
+チェックイン,ja,Booking Process,1
+チェックアウト,ja,Booking Process,1
+支払い,ja,Booking Process,1
+料金,ja,Price,1
+価格,ja,Price,1
+割引,ja,Price,1
+コスパ,ja,Price,1
+スリッパ,ja,In-room Facilities,1
+石鹸,ja,In-room Facilities,1
+ハンドソープ,ja,In-room Facilities,1
+シャンプー,ja,In-room Facilities,1
+コンディショナー,ja,In-room Facilities,1
+リンス,ja,In-room Facilities,1
+ボディソープ,ja,In-room Facilities,1
+歯ブラシ,ja,In-room Facilities,1
+カミソリ,ja,In-room Facilities,1
+ヘアブラシ,ja,In-room Facilities,1
+シャワーキャップ,ja,In-room Facilities,1
+パジャマ,ja,In-room Facilities,1
+部屋着,ja,In-room Facilities,1
+ガウン,ja,In-room Facilities,1
+バスローブ,ja,In-room Facilities,1
+接客,ja,Staff Service,1
+説明,ja,Staff Service,1
+電話対応,ja,Staff Service,1
+問い合わせ,ja,Staff Service,1
+送迎,ja,Transportation,1
+モーニングコール,ja,Staff Service,1
+キャンセル,ja,Booking Process,1
+予約番号,ja,Booking Process,1
+延泊,ja,Booking Process,1
+宿泊名簿,ja,Booking Process,1
+身分証明書,ja,Booking Process,1
+署名,ja,Booking Process,1
+領収書,ja,Booking Process,1
+明細書,ja,Booking Process,1
+精算機,ja,Booking Process,1
+デポジット,ja,Booking Process,1
+預かり金,ja,Booking Process,1
+前払い,ja,Booking Process,1
+値段,ja,Price,1
+コストパフォーマンス,ja,Price,1
+有料,ja,Price,1
+追加料金,ja,Price,1
+延長料金,ja,Price,1
+飲食代,ja,Price,1
+サービス料,ja,Price,1
+消費税,ja,Price,1
+宿泊税,ja,Price,1
+ルームキー,ja,In-room Facilities,1
+鍵,ja,In-room Facilities,1
+カードキー,ja,In-room Facilities,1
+コンセント,ja,In-room Facilities,1
+リモコン,ja,In-room Facilities,1
+電話,ja,In-room Facilities,1
+充電器,ja,In-room Facilities,1
+延長コード,ja,In-room Facilities,1
+アイロン,ja,In-room Facilities,1
+アイロン台,ja,In-room Facilities,1
+ケトル,ja,In-room Facilities,1
+電気ケトル,ja,In-room Facilities,1
+湯沸かし,ja,In-room Facilities,1
+空気洗浄機,ja,Air Conditioning,1
+空気清浄機,ja,Air Conditioning,1
+加湿器,ja,Air Conditioning,1
+ルーター,ja,Internet,1
+LANケーブル,ja,Internet,1
+LAN,ja,Internet,1
+無線LAN,ja,Internet,1
+Wi-Fi,ja,Internet,1
+WiFi,ja,Internet,1
+ネット,ja,Internet,1
+インターネット,ja,Internet,1
+セーフティボックス,ja,In-room Facilities,1
+洋室,ja,Room,1
+和室,ja,Room,1
+ダブルベッド,ja,Bedding,1
+クイーンベッド,ja,Bedding,1
+キングベッド,ja,Bedding,1
+シングルベッド,ja,Bedding,1
+セミダブル,ja,Bedding,1
+マットレス,ja,Bedding,1
+枕,ja,Bedding,1
+枕元,ja,Bedding,1
+掛け布団,ja,Bedding,1
+毛布,ja,Bedding,1
+シーツ,ja,Bedding,1
+ベッドカバー,ja,Bedding,1
+デュベ,ja,Bedding,1
+リネン,ja,Bedding,1
+テーブル,ja,Room,1
+ローテーブル,ja,Room,1
+サイドテーブル,ja,Room,1
+机,ja,Room,1
+デスク,ja,Room,1
+椅子,ja,Room,1
+チェア,ja,Room,1
+ソファ,ja,Room,1
+ソファベッド,ja,Room,1
+ドレッサー,ja,Room,1
+鏡台,ja,Room,1
+棚,ja,Room,1
+本棚,ja,Room,1
+収納,ja,Room,1
+ハンガー,ja,Room,1
+ハンガーラック,ja,Room,1
+タンス,ja,Room,1
+引き出し,ja,Room,1
+荷物置き,ja,Room,1
+バゲージラック,ja,Room,1
+荷物カート,ja,Room,1
+クローク,ja,Room,1
+カーテン,ja,Room,1
+天井,ja,Room,1
+床,ja,Room,1
+絨毯,ja,Room,1
+カーペット,ja,Room,1
+フローリング,ja,Room,1
+窓,ja,Room,1
+ドア,ja,Room,1
+扉,ja,Room,1
+バルコニー,ja,Room,1
+ベランダ,ja,Room,1
+照明,ja,Room,1
+間接照明,ja,Room,1
+ライト,ja,Room,1
+電気,ja,Room,1
+景色,ja,View,1
+眺望,ja,View,1
+オーシャンビュー,ja,View,1
+マウンテンビュー,ja,View,1
+換気,ja,Air Conditioning,1
+換気扇,ja,Air Conditioning,1
+温度,ja,Air Conditioning,1
+湿度,ja,Air Conditioning,1
+騒音,ja,Noise,1
+工事,ja,Noise,1
+隣室,ja,Noise,1
+ユニットバス,ja,Bathroom & Water,1
+シャワールーム,ja,Bathroom & Water,1
+脱衣所,ja,Bathroom & Water,1
+バスタブ,ja,Bathroom & Water,1
+浴槽,ja,Bathroom & Water,1
+湯船,ja,Bathroom & Water,1
+シャワーヘッド,ja,Bathroom & Water,1
+シャワーカーテン,ja,Bathroom & Water,1
+便器,ja,Bathroom & Water,1
+便座,ja,Bathroom & Water,1
+温水便座,ja,Bathroom & Water,1
+ウォシュレット,ja,Bathroom & Water,1
+水洗,ja,Bathroom & Water,1
+タンク,ja,Bathroom & Water,1
+レバー,ja,Bathroom & Water,1
+洗面ボウル,ja,Bathroom & Water,1
+手洗い場,ja,Bathroom & Water,1
+シンク,ja,Bathroom & Water,1
+蛇口,ja,Bathroom & Water,1
+水栓,ja,Bathroom & Water,1
+カラン,ja,Bathroom & Water,1
+給湯器,ja,Bathroom & Water,1
+ボイラー,ja,Bathroom & Water,1
+給水,ja,Bathroom & Water,1
+給湯,ja,Bathroom & Water,1
+排水,ja,Bathroom & Water,1
+排水口,ja,Bathroom & Water,1
+排水溝,ja,Bathroom & Water,1
+排水管,ja,Bathroom & Water,1
+水圧,ja,Bathroom & Water,1
+水量,ja,Bathroom & Water,1
+湯量,ja,Bathroom & Water,1
+水漏れ,ja,Bathroom & Water,1
+漏水,ja,Bathroom & Water,1
+結露,ja,Bathroom & Water,1
+タオル掛け,ja,Bathroom & Water,1
+バスマット,ja,Bathroom & Water,1
+足拭きマット,ja,Bathroom & Water,1
+浴室乾燥機,ja,Bathroom & Water,1
+追い焚き,ja,Bathroom & Water,1
+清掃,ja,Cleaning,1
+掃除,ja,Cleaning,1
+ゴミ,ja,Cleaning,1
+ゴミ箱,ja,Cleaning,1
+ホコリ,ja,Cleaning,1
+カビ,ja,Cleaning,1
+水垢,ja,Cleaning,1
+石鹸カス,ja,Cleaning,1
+ぬめり,ja,Cleaning,1
+黒ずみ,ja,Cleaning,1
+汚れ,ja,Cleaning,1
+臭い,ja,Cleaning,1
+におい,ja,Cleaning,1
+湿気,ja,Cleaning,1
+タオル,ja,Linen,1
+バスタオル,ja,Linen,1
+フェイスタオル,ja,Linen,1
+ハンドタオル,ja,Linen,1
+避難経路,ja,Safety,1
+非常口,ja,Safety,1
+非常灯,ja,Safety,1
+館内案内,ja,Facilities,1
+サウナ,ja,Facilities,1
+コインランドリー,ja,Facilities,1
+ルームサービス,ja,Room Service,1
+距離,ja,Location,1
+周辺施設,ja,Location,1
+治安,ja,Safety,1

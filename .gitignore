@@ -1,0 +1,9 @@
+venv/
+credentials/
+*.json
+data/output/*
+__pycache__/
+*.pyc
+.env
+*.log
+*.Zone.Identifier

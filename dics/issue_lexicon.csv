@@ -1,0 +1,156 @@
+term,language,issue_category,sentiment,version
+汚い,ja,Cleanliness,negative,1
+汚れる,ja,Cleanliness,negative,1
+不衛生,ja,Cleanliness,negative,1
+臭い,ja,Cleanliness,negative,1
+カビ,ja,Cleanliness,negative,1
+ほこり,ja,Cleanliness,negative,1
+埃,ja,Cleanliness,negative,1
+ゴミ,ja,Cleanliness,negative,1
+染みつく,ja,Cleanliness,negative,1
+不潔,ja,Cleanliness,negative,1
+うるさい,ja,Noise,negative,1
+騒がしい,ja,Noise,negative,1
+ノイズ,ja,Noise,negative,1
+騒ぐ,ja,Noise,negative,1
+寒い,ja,Temperature,negative,1
+暑い,ja,Temperature,negative,1
+温度調整,ja,Temperature,negative,1
+空調,ja,Temperature,negative,1
+壊れる,ja,Equipment Failure,negative,1
+故障,ja,Equipment Failure,negative,1
+古い,ja,Deterioration,negative,1
+古びる,ja,Deterioration,negative,1
+老朽化,ja,Deterioration,negative,1
+傷む,ja,Deterioration,negative,1
+ボロボロ,ja,Deterioration,negative,1
+無礼,ja,Staff Attitude,negative,1
+失礼,ja,Staff Attitude,negative,1
+聞き取れない,ja,Staff Attitude,negative,1
+無愛想,ja,Staff Attitude,negative,1
+対応,ja,Staff Attitude,negative,1
+横柄,ja,Staff Attitude,negative,1
+不親切,ja,Staff Attitude,negative,1
+説明,ja,Service Quality,negative,1
+不十分,ja,Service Quality,negative,1
+遅い,ja,Delay,negative,1
+行列,ja,Delay,negative,1
+まずい,ja,Food Quality,negative,1
+美味しくない,ja,Food Quality,negative,1
+割高,ja,Value for Money,negative,1
+予約する,ja,Process Issue,negative,1
+払う,ja,Process Issue,negative,1
+支払う,ja,Process Issue,negative,1
+間違い,ja,Process Issue,negative,1
+トラブル,ja,Process Issue,negative,1
+案内不足,ja,Process Issue,negative,1
+窮屈,ja,Comfort,negative,1
+居心地,ja,Comfort,negative,1
+危ない,ja,Safety,negative,1
+不安,ja,Safety,negative,1
+怖い,ja,Safety,negative,1
+脆弱,ja,Safety,negative,1
+散らかる,ja,Cleanliness,negative,1
+臭う,ja,Cleanliness,negative,1
+濁る,ja,Cleanliness,negative,1
+染みる,ja,Cleanliness,negative,1
+付着する,ja,Cleanliness,negative,1
+腐る,ja,Cleanliness,negative,1
+こびりつく,ja,Cleanliness,negative,1
+湿る,ja,Cleanliness,negative,1
+乾かない,ja,Cleanliness,negative,1
+生臭い,ja,Cleanliness,negative,1
+かび臭い,ja,Cleanliness,negative,1
+換気する,ja,Cleanliness,negative,1
+黄ばむ,ja,Cleanliness,negative,1
+黒ずむ,ja,Cleanliness,negative,1
+響く,ja,Noise,negative,1
+聞こえる,ja,Noise,negative,1
+漏れる,ja,Noise,negative,1
+鳴る,ja,Noise,negative,1
+振動する,ja,Noise,negative,1
+反響する,ja,Noise,negative,1
+荒れる,ja,Noise,negative,1
+うるさがる,ja,Noise,negative,1
+狭苦しい,ja,Room Size,negative,1
+窮屈,ja,Room Size,negative,1
+広くない,ja,Room Size,negative,1
+冷える,ja,Temperature,negative,1
+冷え込む,ja,Temperature,negative,1
+温まらない,ja,Temperature,negative,1
+蒸す,ja,Temperature,negative,1
+凍える,ja,Temperature,negative,1
+乾燥する,ja,Temperature,negative,1
+じめじめする,ja,Temperature,negative,1
+故障する,ja,Equipment Failure,negative,1
+止まる,ja,Equipment Failure,negative,1
+外れる,ja,Equipment Failure,negative,1
+緩む,ja,Equipment Failure,negative,1
+閉まらない,ja,Equipment Failure,negative,1
+不良,ja,Equipment Failure,negative,1
+開かない,ja,Equipment Failure,negative,1
+動かない,ja,Equipment Failure,negative,1
+作動しない,ja,Equipment Failure,negative,1
+接続できない,ja,Equipment Failure,negative,1
+映らない,ja,Equipment Failure,negative,1
+劣化する,ja,Deterioration,negative,1
+色あせる,ja,Deterioration,negative,1
+剥がれる,ja,Deterioration,negative,1
+破れる,ja,Deterioration,negative,1
+傷つく,ja,Deterioration,negative,1
+へたる,ja,Deterioration,negative,1
+擦り切れる,ja,Deterioration,negative,1
+失礼,ja,Staff Attitude,negative,1
+横柄,ja,Staff Attitude,negative,1
+無愛想,ja,Staff Attitude,negative,1
+不親切,ja,Staff Attitude,negative,1
+高圧的,ja,Staff Attitude,negative,1
+威圧的,ja,Staff Attitude,negative,1
+雑,ja,Staff Attitude,negative,1
+素っ気ない,ja,Staff Attitude,negative,1
+誤る,ja,Service Quality,negative,1
+間違える,ja,Service Quality,negative,1
+怠る,ja,Service Quality,negative,1
+漏らす,ja,Service Quality,negative,1
+不足,ja,Service Quality,negative,1
+不足する,ja,Service Quality,negative,1
+売り切れ,ja,Service Quality,negative,1
+売り切れる,ja,Service Quality,negative,1
+乱れる,ja,Service Quality,negative,1
+崩れる,ja,Service Quality,negative,1
+遅れる,ja,Delay,negative,1
+待つ,ja,Delay,negative,1
+待たせる,ja,Delay,negative,1
+待たされる,ja,Delay,negative,1
+来ない,ja,Delay,negative,1
+遅延する,ja,Delay,negative,1
+滞る,ja,Delay,negative,1
+混む,ja,Delay,negative,1
+進まない,ja,Delay,negative,1
+不味い,ja,Food Quality,negative,1
+まずい,ja,Food Quality,negative,1
+濃い,ja,Food Quality,negative,1
+脂っこい,ja,Food Quality,negative,1
+混乱,ja,Process Issue,negative,1
+重複,ja,Process Issue,negative,1
+反映されない,ja,Process Issue,negative,1
+登録されない,ja,Process Issue,negative,1
+煩雑,ja,Process Issue,negative,1
+不明瞭,ja,Process Issue,negative,1
+不快,ja,Comfort,negative,1
+落ち着かない,ja,Comfort,negative,1
+疲れる,ja,Comfort,negative,1
+困る,ja,Comfort,negative,1
+眠れない,ja,Comfort,negative,1
+苦痛,ja,Comfort,negative,1
+嫌,ja,Comfort,negative,1
+痛い,ja,Comfort,negative,1
+寝苦しい,ja,Comfort,negative,1
+不満,ja,Comfort,negative,1
+不便,ja,Comfort,negative,1
+滑る,ja,Safety,negative,1
+つまずく,ja,Safety,negative,1
+転ぶ,ja,Safety,negative,1
+危険,ja,Safety,negative,1
+暗い,ja,Safety,negative,1
+不気味,ja,Safety,negative,1
