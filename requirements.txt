@@ -22,6 +22,7 @@ googleapis-common-protos==1.72.0
 grpcio==1.78.0
 grpcio-status==1.78.0
 idna==3.11
+iniconfig==2.3.0
 ipython==8.12.3
 jedi==0.19.2
 Jinja2==3.1.6
@@ -47,6 +48,7 @@ pexpect==4.9.0
 pickleshare==0.7.5
 pipreqs==0.5.0
 platformdirs==4.9.2
+pluggy==1.6.0
 prompt_toolkit==3.0.52
 proto-plus==1.27.1
 protobuf==6.33.5
@@ -56,6 +58,7 @@ pyasn1==0.6.2
 pyasn1_modules==0.4.2
 pycparser==3.0
 Pygments==2.19.2
+pytest==9.0.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
 pyzmq==27.1.0
