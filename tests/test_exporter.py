@@ -20,14 +20,8 @@ def test_load_reason_records_to_bigquery():
         }
     ]
 
-    # set environment variables
-    env_vars = {
-        "PROJECT_ID": "test_project",
-        "DATASET_ID": "test_dataset"
-    }
-
     # set BigQuery Mock and patch environment variables
-    with patch.dict(os.environ, env_vars), \
+    with patch("src.reason_extraction.output.exporter.REVIEW_REASONS_TABLE_ID", "test_project.test_dataset.test_table_name"), \
          patch("src.reason_extraction.output.exporter.bigquery.Client") as MockClient, \
          patch("src.reason_extraction.output.exporter.bigquery.LoadJobConfig"):
         
@@ -43,7 +37,7 @@ def test_load_reason_records_to_bigquery():
         # check if the client was called once
         MockClient.assert_called_once()
         
-        expected_table = "test_project.test_dataset.review_reasons"
+        expected_table = "test_project.test_dataset.test_table_name"
         
         # check if load_table_from_json was called with the correct arguments
         mock_client_instance.load_table_from_json.assert_called_once()
