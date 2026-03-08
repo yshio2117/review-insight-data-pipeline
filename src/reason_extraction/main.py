@@ -1,8 +1,6 @@
 import csv
 from pathlib import Path
 import argparse
-from dotenv import load_dotenv
-load_dotenv()
 from src.reason_extraction.pipeline.review_pipeline import run_pipeline
 from config.settings import SENTIMENT_LABELS
 

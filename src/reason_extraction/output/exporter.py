@@ -4,7 +4,7 @@ import copy
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from pathlib import Path
-from config.settings import BASE_DIR
+from config.settings import BASE_DIR,WRITE_DISPOSITION,REVIEW_REASONS_TABLE_ID
 
 
 
@@ -79,25 +79,22 @@ def load_reason_records_to_bigquery(reason_records):
     ]
 
     client = bigquery.Client()
-    project_id = os.getenv("PROJECT_ID")
-    dataset_id = os.getenv("DATASET_ID")
-    table_id = "review_reasons"
 
-    reasons_table = f"{project_id}.{dataset_id}.{table_id}"
-
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        create_disposition="CREATE_IF_NEEDED",
+        write_disposition=WRITE_DISPOSITION,
+        clustering_fields=["review_id"] # cluster by review_id to optimize query performance when joining with reviews table
+    )
     # load to reasons table
     load_job = client.load_table_from_json(
         reason_records,
-        reasons_table,
-        job_config=bigquery.LoadJobConfig(
-            schema=schema,
-            create_disposition="CREATE_IF_NEEDED",
-            clustering_fields=["review_id"], # cluster by review_id to optimize query performance when joining with reviews table
-        ),
+        REVIEW_REASONS_TABLE_ID,
+        job_config=job_config
     )
 
     load_job.result()
-    print(f"Loaded reason records to BigQuery: {reasons_table}.")
+    print(f"Loaded reasons records to : {REVIEW_REASONS_TABLE_ID}.")
 
 
 def export_reasons(reason_records,args):

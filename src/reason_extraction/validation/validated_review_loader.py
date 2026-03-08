@@ -3,7 +3,7 @@ import os
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from pathlib import Path
-from config.settings import BASE_DIR
+from config.settings import BASE_DIR,WRITE_DISPOSITION,REVIEW_VALIDATED_TABLE_ID
 
 def export_validated_reviews_to_csv(reviews, filename):
     """
@@ -124,52 +124,52 @@ def load_validated_reviews_to_bq(reviews):
     ]
 
     client = bigquery.Client()
-    project_id = os.getenv("PROJECT_ID")
-    dataset_id = os.getenv("DATASET_ID")
-    table_id = "review_validated"
 
     # main table
-    reviews_table = f"{project_id}.{dataset_id}.{table_id}"
+    review_validated_table = REVIEW_VALIDATED_TABLE_ID
     # dedup view to get the latest ingested review for each review_id, and all invalid reviews with null review_id
-    reviews_table_dedup = f"{project_id}.{dataset_id}.{table_id}_dedup"
+    review_validated_table_dedup = f"{REVIEW_VALIDATED_TABLE_ID}_dedup"
 
+    # check if validated table exists
     try: 
-        reviews_table = client.get_table(reviews_table) # check if reviews_table exists
+        review_validated_table = client.get_table(review_validated_table) 
     except NotFound: 
-        # create reviews_table if not exists
-        reviews_table = bigquery.Table(reviews_table, schema=schema)
+        # create review_validated_table if not exists
+        review_validated_table = bigquery.Table(review_validated_table, schema=schema)
         # Set Partition by posted_at_iso
-        reviews_table.time_partitioning = bigquery.TimePartitioning(
+        review_validated_table.time_partitioning = bigquery.TimePartitioning(
             type_=bigquery.TimePartitioningType.DAY,
             field="posted_at_iso",  
         )
         # set clustering by review_id to optimize query performance when joining with reasons table
-        reviews_table.clustering_fields = ["review_id"]
-        client.create_table(reviews_table)
-        print("Created validated reviews table.")
+        review_validated_table.clustering_fields = ["review_id"]
+        client.create_table(review_validated_table)
+        print(f"Created {REVIEW_VALIDATED_TABLE_ID}.")
 
 
     # remove reviews['tokens'] before loading to BigQuery, since it's too long data to load.
     reviews = [{k: v for k, v in review.items() if k != "tokens"} for review in reviews]
 
 
-    # load to reviews_table
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        write_disposition=WRITE_DISPOSITION
+    )
+        
+    # load to validated table
     load_job = client.load_table_from_json(
         reviews,
-        reviews_table,
-        job_config=bigquery.LoadJobConfig(
-            schema=schema,
-            write_disposition="WRITE_APPEND",
-        ),
+        review_validated_table,
+        job_config=job_config
     )
 
     load_job.result()
-    print(f"Loaded validated reviews to BigQuery: {reviews_table}.")
+    print(f"Loaded validated reviews to : {review_validated_table}.")
 
 
     # 2) dedup view（to get the latest ingested review for each review_id, and all invalid reviews with null review_id）
     dedup_sql = f"""
-    CREATE OR REPLACE VIEW `{reviews_table_dedup}` AS
+    CREATE OR REPLACE VIEW `{review_validated_table_dedup}` AS
     WITH valid_dedup AS (
       SELECT * EXCEPT(rn)
       FROM (
@@ -179,13 +179,13 @@ def load_validated_reviews_to_bq(reviews):
             PARTITION BY review_id
             ORDER BY ingested_at DESC, row_id DESC
           ) AS rn
-        FROM `{reviews_table}` r
+        FROM `{review_validated_table}` r
         WHERE review_id IS NOT NULL
       )
       WHERE rn = 1
     ),
     invalid_all AS (
-      SELECT * FROM `{reviews_table}`
+      SELECT * FROM `{review_validated_table}`
       WHERE review_id IS NULL
     )
     SELECT * FROM valid_dedup
@@ -194,7 +194,7 @@ def load_validated_reviews_to_bq(reviews):
     """
     q = client.query(dedup_sql)
     q.result()
-    print(f"Created/Updated dedup view: {reviews_table_dedup}.")
+    print(f"Created/Updated dedup view: {review_validated_table_dedup}.")
 
 
 

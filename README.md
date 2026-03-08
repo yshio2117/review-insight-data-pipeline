@@ -38,7 +38,7 @@ flowchart LR
   subgraph BQ["BigQuery"]
     RAW["review_raw (RAW)"]
     VAL["review_validated (+ dedup view) (VAL)"]
-    FACT["reason (FACT)"]
+    FACT["review_reasons (FACT)"]
   end
 
   DASH["Looker Studio Dashboard"]

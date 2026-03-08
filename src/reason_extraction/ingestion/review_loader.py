@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from pathlib import Path
-from config.settings import BASE_DIR
+from config.settings import BASE_DIR,WRITE_DISPOSITION,PROJECT_ID,DATASET_ID,REVIEW_RAW_TABLE_ID
 
 
 
@@ -164,12 +164,10 @@ def raw_reviews_to_bq(reviews):
     ]
 
     client = bigquery.Client()
-    project_id = os.getenv("PROJECT_ID")
-    dataset_id = os.getenv("DATASET_ID")
-    table_id = "review_raw"
 
     # check if dataset exists, if not create it
-    dataset_ref = f"{project_id}.{dataset_id}"
+    dataset_ref = PROJECT_ID + "." + DATASET_ID
+    
     try:
         client.get_dataset(dataset_ref)
         print(f"Dataset exists: {dataset_ref}")
@@ -180,30 +178,26 @@ def raw_reviews_to_bq(reviews):
         client.create_dataset(dataset)
         print(f"Dataset {dataset_ref} created.")
 
+    # load data to BigQuery, if the table doesn't exist, create it with the defined schema
+    try:
+        client.get_table(REVIEW_RAW_TABLE_ID)
+    except NotFound:
+        client.create_table(bigquery.Table(REVIEW_RAW_TABLE_ID, schema=schema))
+        print(f"Created {REVIEW_RAW_TABLE_ID}.")
 
-    raw_reviews_table = f"{project_id}.{dataset_id}.{table_id}"
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        write_disposition=WRITE_DISPOSITION
+    )
 
-    try: 
-        raw_reviews_table = client.get_table(raw_reviews_table) # check if raw_reviews_table exists
-    except NotFound: 
-        # create raw_reviews_table if not exists
-        raw_reviews_table = bigquery.Table(raw_reviews_table, schema=schema)
-        client.create_table(raw_reviews_table)
-        print("Created review_raw table.")
-
-
-    # load raw_reviews to BigQuery
     load_job = client.load_table_from_json(
         reviews,
-        raw_reviews_table,
-        job_config=bigquery.LoadJobConfig(
-            schema=schema,
-            write_disposition="WRITE_APPEND",
-        ),
+        REVIEW_RAW_TABLE_ID,
+        job_config=job_config
     )
 
     load_job.result()
-    print(f"Loaded raw reviews to BigQuery: {raw_reviews_table}.")
+    print(f"Loaded raw reviews to: {REVIEW_RAW_TABLE_ID}.")
 
 
 def load_raw_reviews(reviews, args, suffix):

@@ -1,13 +1,15 @@
 import os
 from pathlib import Path
 from google.cloud import bigquery
-from dotenv import load_dotenv
-load_dotenv()
+from config.settings import PROJECT_ID,DATASET_ID,REVIEW_VALIDATED_TABLE_ID,REVIEW_REASONS_TABLE_ID
+
 
 def render_sql(template):
-    project_id = os.environ["PROJECT_ID"]
-    dataset_id = os.environ["DATASET_ID"]
-    return template.format(PROJECT_ID=project_id, DATASET_ID=dataset_id)
+    return template.format(PROJECT_ID=PROJECT_ID, 
+                           DATASET_ID=DATASET_ID,
+                           REVIEW_VALIDATED_TABLE_ID=REVIEW_VALIDATED_TABLE_ID,
+                           REVIEW_REASONS_TABLE_ID=REVIEW_REASONS_TABLE_ID
+                           )
 
 def run_sql_file(client, path):
     template = path.read_text(encoding="utf-8")

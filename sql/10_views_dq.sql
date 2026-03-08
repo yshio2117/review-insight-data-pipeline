@@ -12,7 +12,7 @@ WITH base AS (
     posted_at_iso,
     is_valid,
     invalid_reason
-  FROM `{PROJECT_ID}.{DATASET_ID}.review_validated_dedup`
+  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup`
 ),
 dup_calc AS (
   -- Duplicate definition: same (source, source_id) within the same run_id (only when both are present)
@@ -78,7 +78,7 @@ SELECT
   source_file,
   reason AS invalid_reason,
   COUNT(*) AS rows_count
-FROM `{PROJECT_ID}.{DATASET_ID}.review_validated`, -- Use the non-deduped table to get all invalid reasons, including duplicates
+FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}`, -- Use the non-deduped table to get all invalid reasons, including duplicates
 UNNEST(invalid_reason) AS reason
 GROUP BY run_id, source_file, invalid_reason
 ORDER BY run_id, rows_count DESC
@@ -90,7 +90,7 @@ CREATE OR REPLACE VIEW `{PROJECT_ID}.{DATASET_ID}.v_dq_metrics_by_run_source` AS
 WITH base AS (
   SELECT
     run_id, source_file, source, source_id, review_text, posted_at, posted_at_iso, is_valid
-  FROM `{PROJECT_ID}.{DATASET_ID}.review_validated_dedup`
+  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup`
 )
 SELECT
   run_id,

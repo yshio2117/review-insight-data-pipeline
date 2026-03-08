@@ -16,8 +16,8 @@ SELECT
   r.predicate,
   r.review_id,
   r.reason_id
-FROM `{PROJECT_ID}.{DATASET_ID}.review_reasons` r
-JOIN `{PROJECT_ID}.{DATASET_ID}.review_validated_dedup` rv
+FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_REASONS_TABLE_ID}` r
+JOIN `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup` rv
   ON r.review_id = rv.review_id
  AND r.run_id = rv.run_id
 WHERE rv.is_valid = TRUE
@@ -48,8 +48,8 @@ FROM (
       PARTITION BY r.run_id, r.review_id, r.sentiment_type
       ORDER BY r.confidence DESC, r.reason_id ASC
     ) AS rn
-  FROM `{PROJECT_ID}.{DATASET_ID}.review_reasons` r
-  JOIN `{PROJECT_ID}.{DATASET_ID}.review_validated_dedup` rv
+  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_REASONS_TABLE_ID}` r
+  JOIN `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup` rv
     ON r.review_id = rv.review_id
    AND r.run_id = rv.run_id
   WHERE rv.is_valid = TRUE
@@ -144,7 +144,7 @@ WITH valid_reviews AS (
     run_id,
     source_file,
     COUNT(review_id) AS valid_review_count
-  FROM `{PROJECT_ID}.{DATASET_ID}.review_validated_dedup`
+  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup`
   WHERE is_valid = TRUE
   GROUP BY run_id, source_file
 ),
