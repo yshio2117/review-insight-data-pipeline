@@ -24,7 +24,7 @@ CSV → Python (cleaning + rule-based extraction + validation) → BigQuery → 
 
 - Ingestion inputs: a local CSV file and lexicons used to detect negative terms and categorize extracted reasons.
 - Processing: Python scripts
-- Storage: 3 tables + 1 view (details → [BigQuery Schema](#bigquery-schema))
+- Storage: 3 tables + 1 view ([see Data Model section](#data-model))
 - BI: Looker Studio (top reasons, trends, data quality metrics)
 
 ```mermaid
@@ -68,6 +68,53 @@ Columns expected in the input CSV:
 - review_text (Review text to analyze. Type: STRING)(REQUIRED)
 - posted_at (When the review was posted. Type: DATE or TIMESTAMP)(REQUIRED)
 - user_name (Reviewer name. Type: STRING) (OPTIONAL)
+
+
+
+## Data Model
+
+This pipeline follows a layered data architecture:
+
+1. **review_raw**  
+   - Ingested raw data from source  
+   - No transformation applied  
+
+2. **review_validated**  
+   - Transformed and schema-validated data  
+   - May contain duplicate `review_id` records  
+   (`review_id` is a deterministic UUID v5 generated from the combination of
+  (`source`, `source_id`), ensuring consistent cross-run identification.)
+
+3. **review_validated_dedup (View)**  
+   - Deduplicated view of `review_validated`  
+   - Keeps only the latest record per `review_id`  
+   - Uses `ingested_at` to select the most recent entry  
+
+4. **review_reasons**  
+   - Extracted reasons
+
+<br/>
+
+Note: Table names are generated dynamically using a configurable prefix
+and can be modified via `config/settings.py`.
+
+[Tables Detail](docs/data_dictionary.md)
+
+[ER Diagram](docs/er_diagram.md)
+
+
+
+## Data Quality Checks
+Implemented minimal checks for raw reveiws before loading to BigQuery:
+- required column presence(`source_id`, `source`, `review_text`, and `posted_at`).
+- duplicate `reviews` detection: check whether `source_id` and `source` are the same. if so, we consider them to be the duplicated reviews.
+- invalid timestamp format handling(`posted_at` and `posted_at_iso`. (`posted_at_iso` will be added as metadata for loading into BigQuery after ingestion.))
+- basic length filter to `review_text` (between 5 and 500 characters).
+
+<br/>
+
+Note: Records that do not pass the quality check are flagged as `is_valid = False` and excluded from downstream processing. They can be monitored in the review_validated table.
+<br/>
 
 
 ## Extraction Logic (Rule-based)
@@ -117,32 +164,6 @@ Excerpt: issue_lexicon.csv
 
 Note: The 'sentiment' column could be set to 'positive' when extracting positive reasons instead of negative ones (currently not implemented).
 
-
-## Data Quality Checks
-Implemented minimal checks for raw reveiws before loading to BigQuery:
-- required column presence(`source_id`, `source`, `review_text`, and `posted_at`).
-- duplicate `reviews` detection: check whether `source_id` and `source` are the same. if so, we consider them to be the duplicated reviews.
-- invalid timestamp format handling(`posted_at` and `posted_at_iso`. (`posted_at_iso` will be added as metadata for loading into BigQuery after ingestion.))
-- basic length filter to `review_text` (between 5 and 500 characters).
-
-<br/>
-
-Note: Records that do not pass the quality check are flagged as `is_valid = False` and excluded from downstream processing. They can be monitored in the review_validated table.
-<br/>
-
-
-## BigQuery Schema
-**review_raw:** raw ingest
-
-**review_validated:** validated reviews + metadata (append-only)
-
-**review_validated_dedup (VIEW):** latest/representative row per review_id
-
-**review_reasons:** extracted reasons
-
-[Tables Detail](docs/data_dictionary.md)
-
-[ER Diagram](docs/er_diagram.md)
 
 
 ## Dashboard (Looker Studio)
