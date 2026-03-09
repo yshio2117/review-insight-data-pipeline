@@ -1,77 +1,88 @@
+-- basic metrics by run and source file, including breakdown of invalid reasons
 CREATE OR REPLACE VIEW `{PROJECT_ID}.{DATASET_ID}.v_dq_metrics_by_run` AS
 WITH base AS (
   SELECT
     run_id,
     source_file,
     ingested_at,
-    source,
-    source_id,
-    review_id,
-    review_text,
-    posted_at,
-    posted_at_iso,
     is_valid,
-    invalid_reason
-  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup`
+    IFNULL(invalid_reason, []) AS invalid_reason
+  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}`
 ),
-dup_calc AS (
-  -- Duplicate definition: same (source, source_id) within the same run_id (only when both are present)
+reason_flags AS (
   SELECT
-    b.*,
-    CASE
-      WHEN source IS NOT NULL AND source_id IS NOT NULL
-      THEN COUNT(*) OVER (PARTITION BY run_id, source, source_id)
-      ELSE 0
-    END AS dup_cnt
-  FROM base b
+    run_id,
+    source_file,
+    ingested_at,
+    is_valid,
+    invalid_reason,
+
+    -- check if each specific reason is present in the invalid_reason array
+    ('Either source_id or source is missing for review_id generation'
+      IN UNNEST(invalid_reason)) AS r_missing_source_or_source_id,
+
+    ('posted_at is missing'
+      IN UNNEST(invalid_reason)) AS r_posted_at_missing,
+
+    ('posted_at parse failed'
+      IN UNNEST(invalid_reason)) AS r_posted_at_parse_failed,
+
+    ('review_text is empty'
+      IN UNNEST(invalid_reason)) AS r_review_text_empty,
+
+    ('review_text length is too short'
+      IN UNNEST(invalid_reason)) AS r_review_text_too_short,
+
+    ('review_text length is too long'
+      IN UNNEST(invalid_reason)) AS r_review_text_too_long,
+
+    ('Duplicate review based on source and source_id'
+      IN UNNEST(invalid_reason)) AS r_duplicate
+
+  FROM base
 )
+
 SELECT
   run_id,
   source_file,
 
-  -- Use ingestion time as the run time anchor for dashboards
+  -- min & max ingestion times for the run time
   MIN(ingested_at) AS run_started_at,
   MAX(ingested_at) AS run_last_seen_at,
 
-  COUNT(*) AS unique_reviews,
+  COUNT(*) AS total_rows,
+  -- unique_reviews = Neither duplicate nor missing source/source_id
+  COUNTIF(NOT r_duplicate AND NOT r_missing_source_or_source_id) AS unique_reviews,
+
   COUNTIF(is_valid IS TRUE) AS rows_valid,
-  COUNTIF(is_valid IS FALSE) AS rows_invalid,  -- Note: Should not write as COUNTIF(is_valid) nor COUNTIF(NOT is_valid) in BigQuery. It's not equal with COUNTIF(is_valid IS FALSE/TRUE) and may pick up unexpected evaluation results..
+  COUNTIF(is_valid IS FALSE) AS rows_invalid,
   SAFE_DIVIDE(COUNTIF(is_valid IS TRUE), COUNT(*)) AS valid_rate,
 
-  -- "Required fields" completeness (value-level checks)
-  COUNTIF(source IS NULL OR source = "") AS missing_source_rows,
-  COUNTIF(source_id IS NULL OR source_id = "") AS missing_source_id_rows,
-  COUNTIF(review_text IS NULL OR review_text = "") AS missing_review_text_rows,
+  -- Required fields completeness
+  COUNTIF(r_missing_source_or_source_id) AS missing_source_or_source_id_rows,
+  COUNTIF(r_review_text_empty) AS missing_review_text_rows,
+  COUNTIF(r_posted_at_missing) AS missing_posted_at_rows,
+  COUNTIF(r_posted_at_parse_failed) AS posted_at_parse_failed_rows,
+  SAFE_DIVIDE(COUNTIF(r_posted_at_parse_failed), COUNT(*)) AS posted_at_parse_failed_rate,
 
-  -- posted_at is optional, but track nulls/parse failures
-  COUNTIF(posted_at IS NULL OR posted_at = "") AS missing_posted_at_rows,
-  COUNTIF(
-    (posted_at IS NOT NULL AND posted_at != "")
-    AND posted_at_iso IS NULL
-  ) AS posted_at_parse_failed_rows,
+  -- Length filter metrics
+  COUNTIF(r_review_text_too_short) AS too_short_rows,
+  COUNTIF(r_review_text_too_long)  AS too_long_rows,
   SAFE_DIVIDE(
-    COUNTIF((posted_at IS NOT NULL AND posted_at != "") AND posted_at_iso IS NULL),
-    COUNT(*)
-  ) AS posted_at_parse_failed_rate,
-
-  -- Length filter metrics (based on actual text length)
-  COUNTIF(CHAR_LENGTH(COALESCE(review_text, "")) < 5) AS too_short_rows,
-  COUNTIF(CHAR_LENGTH(COALESCE(review_text, "")) > 500) AS too_long_rows,
-  SAFE_DIVIDE(
-    COUNTIF(CHAR_LENGTH(COALESCE(review_text, "")) < 5)
-    + COUNTIF(CHAR_LENGTH(COALESCE(review_text, "")) > 500),
+    COUNTIF(r_review_text_too_short) + COUNTIF(r_review_text_too_long),
     COUNT(*)
   ) AS length_out_of_range_rate,
 
-  -- Duplicate metrics (computed)
-  COUNTIF(dup_cnt > 1) AS duplicate_rows,
-  SAFE_DIVIDE(COUNTIF(dup_cnt > 1), COUNT(*)) AS duplicate_rate,
-  COUNT(*) + COUNTIF(dup_cnt > 1) AS total_rows
-FROM dup_calc
-GROUP BY run_id, source_file
+  -- Duplicate metrics
+  COUNTIF(r_duplicate) AS duplicate_rows,
+  SAFE_DIVIDE(COUNTIF(r_duplicate), COUNT(*)) AS duplicate_rate
+
+FROM reason_flags
+GROUP BY run_id, source_file;
 
 
--- Breakdown of invalid reasons (good for a bar chart in Looker Studio)
+
+-- Breakdown of invalid reasons
 CREATE OR REPLACE VIEW `{PROJECT_ID}.{DATASET_ID}.v_dq_invalid_reasons_by_run` AS
 SELECT
   run_id,
@@ -82,24 +93,4 @@ FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}`, -- Use the non-ded
 UNNEST(invalid_reason) AS reason
 GROUP BY run_id, source_file, invalid_reason
 ORDER BY run_id, rows_count DESC
-;
-
-
--- Optional: DQ metrics by run_id + source (helps spot source-specific issues)
-CREATE OR REPLACE VIEW `{PROJECT_ID}.{DATASET_ID}.v_dq_metrics_by_run_source` AS
-WITH base AS (
-  SELECT
-    run_id, source_file, source, source_id, review_text, posted_at, posted_at_iso, is_valid
-  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}_dedup`
-)
-SELECT
-  run_id,
-  source_file,
-  source,
-  COUNT(*) AS rows_total,
-  COUNTIF(is_valid IS TRUE) AS rows_valid,
-  SAFE_DIVIDE(COUNTIF(is_valid IS TRUE), COUNT(*)) AS valid_rate,
-  COUNTIF((posted_at IS NOT NULL AND posted_at != "") AND posted_at_iso IS NULL) AS posted_at_parse_failed_rows
-FROM base
-GROUP BY run_id, source_file, source
 ;
