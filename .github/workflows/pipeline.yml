@@ -63,3 +63,11 @@ jobs:
           python -m src.reason_extraction.main \
             --input-file data/input/sample_hotel_reviews.csv \
             --output bigquery
+
+      # Create/replace views
+      - name: Create or Replace BigQuery Views for Looker Studio
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          DATASET_ID: ${{ secrets.BQ_DATASET_ID }}
+        run: |
+          python -m src.reason_extraction.apply_sql
