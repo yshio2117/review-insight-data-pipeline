@@ -69,5 +69,6 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           DATASET_ID: ${{ secrets.BQ_DATASET_ID }}
+          TABLE_PREFIX: ${{ secrets.BQ_TABLE_PREFIX }}
         run: |
           python -m src.reason_extraction.apply_sql
