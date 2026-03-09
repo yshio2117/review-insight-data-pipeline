@@ -7,7 +7,7 @@ WITH base AS (
     ingested_at,
     is_valid,
     IFNULL(invalid_reason, []) AS invalid_reason
-  FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}`
+  FROM `{REVIEW_VALIDATED_TABLE_ID}`
 ),
 reason_flags AS (
   SELECT
@@ -89,7 +89,7 @@ SELECT
   source_file,
   reason AS invalid_reason,
   COUNT(*) AS rows_count
-FROM `{PROJECT_ID}.{DATASET_ID}.{REVIEW_VALIDATED_TABLE_ID}`, -- Use the non-deduped table to get all invalid reasons, including duplicates
+FROM `{REVIEW_VALIDATED_TABLE_ID}`, -- Use the non-deduped table to get all invalid reasons, including duplicates
 UNNEST(invalid_reason) AS reason
 GROUP BY run_id, source_file, invalid_reason
 ORDER BY run_id, rows_count DESC
