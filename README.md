@@ -256,6 +256,8 @@ uuidgen
 
 `DATASET_ID` – Your BigQuery dataset ID.
 
+`TABLE_PREFIX` - Prefix for the output tables.
+
 `GOOGLE_APPLICATION_CREDENTIALS` – Path to your Google Cloud service account key JSON file (set either in your system environment or in .env).
 
 
