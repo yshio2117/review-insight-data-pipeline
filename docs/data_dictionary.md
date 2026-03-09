@@ -27,18 +27,20 @@ review_id: Deterministic UUIDv5 generated from (source_id, source), deterministi
 Dedup rule: select the latest ingested record per review_id
 
 
-**SQL example:**
-SELECT * EXCEPT(rn)
+The view selects the most recent record per `review_id`
+using the `ingested_at` timestamp:
+```sql
+SELECT *
 FROM (
-  SELECT
-    v.*,
-    ROW_NUMBER() OVER (
-      PARTITION BY review_id
-      ORDER BY ingested_at DESC
-    ) AS rn
-  FROM review_validated v
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY review_id
+               ORDER BY ingested_at DESC
+           ) AS rn
+    FROM review_validated
 )
-WHERE rn = 1;
+WHERE rn = 1
+```
 
 ### Table: `review_reasons` (FACT)
 **Purpose:** Structure the 'reasons' extracted from review text so they can be aggregated in a dashboard (e.g., by issue/entity and confidence)
