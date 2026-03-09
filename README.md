@@ -239,6 +239,8 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+<br/>
+
 ### Environment Variables
 Copy .env.example to .env, then configure the following variables:
 
@@ -258,6 +260,8 @@ uuidgen
 
 
 ⚠️ Do not commit your service account key file to the repository.
+
+<br/>
 
 ### Run
 
@@ -282,3 +286,35 @@ After running main.py, run the command below:
 ```
 python -m src.reason_extraction.apply_sql
 ```
+
+<br/>
+
+## CI/CD (GitHub Actions)
+This repository includes a lightweight CI/CD workflow using GitHub Actions.
+
+### Triggers
+
+Manual run (workflow_dispatch), and
+Scheduled run (daily cron).
+
+### Steps
+- Runs unit tests (pytest) first.
+The pipeline executes only if tests pass
+Pipeline execution.
+
+- Loads results into BigQuery (demo mode uses `WRITE_MODE=TRUNCATE` to avoid accumulating data in the sandbox)
+
+### Authentication
+
+Uses a GCP service account via GitHub Secrets.
+
+Note: For production, prefer Workload Identity Federation (OIDC) instead of long-lived service account keys.
+
+### MeCab dictionary in CI
+For Japanese text processing, this project uses MeCab.
+
+#### Local development: 
+I use mecab-ipadic-neologd for improved tokenization.
+
+#### CI environment: 
+the workflow uses the default ipadic dictionary to keep the pipeline lightweight and reproducible.
