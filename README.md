@@ -226,20 +226,43 @@ Allows filtering by run and drilling down to validated records and extracted rea
 
 
 ## Setup
-
 ### Requirements
+- Python 3.12 or later
 
-- Python 3.12+
-- A Google Cloud project with a BigQuery dataset
+- A Google Cloud project with a BigQuery dataset configured
 
-### Installation
+### Prerequisites (Ubuntu / WSL2)
+This project uses MeCab via mecab-python3.
+Install the required system dependencies first:
 
-```bash
+``` bash
+sudo apt-get update
+sudo apt-get install -y mecab libmecab-dev mecab-ipadic-utf8
+```
+
+
+#### Sanity check
+
+Verify that MeCab is installed correctly:
+
+``` bash
+echo "こんにちは" | mecab
+``` 
+
+If installation is successful, the command should output the parsed result.
+
+
+
+### Install Python dependencies
+Create a virtual environment and install the required packages:
+
+``` bash
 python -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
-<br/>
+
 
 ### Environment Variables
 Copy .env.example to .env, then configure the following variables:
@@ -247,8 +270,7 @@ Copy .env.example to .env, then configure the following variables:
 `UUID_STRING` – Used to generate a consistent reason_id for identical review texts across different pipeline runs.
 Generate one by running:
 
-bash
-```
+``` bash
 uuidgen
 ```
 
@@ -263,7 +285,7 @@ uuidgen
 
 ⚠️ Do not commit your service account key file to the repository.
 
-<br/>
+
 
 ### Run
 
