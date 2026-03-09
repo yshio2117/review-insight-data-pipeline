@@ -63,11 +63,11 @@ Note: Negative lexicon credit: Japanese Sentiment Dictionary (Volume of Nouns) v
 ### Expected CSV schema
 Columns expected in the input CSV:
 
-- source_id (Review ID in the original source. Type: STRING or INT64)
-- source (Review source name. Type: STRING; e.g., booking.com, tripadvisor)
-- review_text (Review text to analyze. Type: STRING)
-- posted_at (When the review was posted. Type: DATE or TIMESTAMP) (optional)
-- user_name (Reviewer name. Type: STRING) (optional)
+- source_id (Review ID in the original source. Type: STRING or INT64)(REQUIRED)
+- source (Review source name. Type: STRING; e.g., booking.com, tripadvisor)(REQUIRED)
+- review_text (Review text to analyze. Type: STRING)(REQUIRED)
+- posted_at (When the review was posted. Type: DATE or TIMESTAMP)(REQUIRED)
+- user_name (Reviewer name. Type: STRING) (OPTIONAL)
 
 
 ## Extraction Logic (Rule-based)
@@ -120,7 +120,7 @@ Note: The 'sentiment' column could be set to 'positive' when extracting positive
 
 ## Data Quality Checks
 Implemented minimal checks for raw reveiws before loading to BigQuery:
-- required column presence(`source_id`, `source`, `review_text`, and `posted_at`). `posted_at` can be checked as optional.
+- required column presence(`source_id`, `source`, `review_text`, and `posted_at`).
 - duplicate `reviews` detection: check whether `source_id` and `source` are the same. if so, we consider them to be the duplicated reviews.
 - invalid timestamp format handling(`posted_at` and `posted_at_iso`. (`posted_at_iso` will be added as metadata for loading into BigQuery after ingestion.))
 - basic length filter to `review_text` (between 5 and 500 characters).

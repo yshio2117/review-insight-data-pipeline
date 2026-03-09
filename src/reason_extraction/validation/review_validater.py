@@ -48,7 +48,7 @@ def is_invalid_review_text(review):
 
 
 
-def is_invalid_posted_at(review,posted_at_required=False):
+def is_invalid_posted_at(review):
     """
     Validate posted_at using both raw posted_at and normalized posted_at_iso.
 
@@ -56,8 +56,6 @@ def is_invalid_posted_at(review,posted_at_required=False):
     ----------
     review : dict
         e.g. {'posted_at':..., 'posted_at_iso':...,...}
-    posted_at_required : bool
-        if True, missing/empty posted_at becomes invalid.
 
     Returns
     -------
@@ -65,7 +63,7 @@ def is_invalid_posted_at(review,posted_at_required=False):
          e.g. {'posted_at':..., 'posted_at_iso':..., 'is_valid':False, 'invalid_reason':['posted_at is missing']...}, ...
 
     Validation rules:
-    1. if posted_at(raw) is empty/None → invalid (MISSING) or OK (if not required)
+    1. if posted_at(raw) is empty/None → invalid (MISSING)
     2. if posted_at(raw) exists but posted_at_iso is None → invalid (PARSE_FAILED)
     3. if posted_at_iso exists but not in UTC nor parseable → invalid (NOT_UTC or PARSE_FAILED)
     """
@@ -79,8 +77,7 @@ def is_invalid_posted_at(review,posted_at_required=False):
 
     # 1) Missing raw posted_at
     if raw_is_missing:
-        if posted_at_required:
-            reasons.append("posted_at is missing")
+        reasons.append("posted_at is missing")
 
     # 2) Raw exists but normalization filed
     raw_has_value = isinstance(raw, str) and bool(raw.strip())
@@ -185,8 +182,8 @@ def validate_reviews(reviews):
         review,seen = is_invalid_source(review,seen_reviews)        
         # validate review_text
         review = is_invalid_review_text(review)
-        # validate posted_at and posted_at_iso. Set posted_at_required as False, if missing posted_at should be treated as valid.
-        review = is_invalid_posted_at(review, posted_at_required=True)
+        # validate posted_at and posted_at_iso. 
+        review = is_invalid_posted_at(review)
 
         review["invalid_reason"] = sorted(set(review["invalid_reason"]))
 
