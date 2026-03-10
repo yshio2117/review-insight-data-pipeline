@@ -224,8 +224,29 @@ Allows filtering by run and drilling down to validated records and extracted rea
 ├── tests
 ```
 
+<br/>
 
 ## Setup
+
+### Quick Start (Recommended)
+
+Run the pipeline locally in a Docker container with the command below. No GCP setup is required.
+
+```bash
+make
+```
+
+<br/>
+
+Note: The Docker image uses the default ipadic dictionary to keep the pipeline lightweight and reproducible.
+**mecab-ipadic-neologd, which offers improved extraction accuracy, is used only during development.**
+
+<br/>
+
+### Alternative Setup (CLI / Native Environment)
+If you prefer to run the project without Docker, or want to use BigQuery output, follow the steps below to set up a local environment.
+
+
 ### Requirements
 - Python 3.12 or later
 
