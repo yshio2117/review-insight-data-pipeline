@@ -95,7 +95,7 @@ def tokenize(text, search_text)->list:
     """
 
     # load MeCab Tagger
-    tagger = MeCab.Tagger()
+    tagger = MeCab.Tagger("-d /var/lib/mecab/dic/ipadic-utf8")
     
     node = tagger.parseToNode(text)
     
@@ -190,7 +190,7 @@ def tokenize(text, search_text)->list:
                 
                 w_ends[-1]=w_ends[-1]+len(node.surface)
                 
-#------------                
+         
             # サ変接続＋する＝動詞
             elif len(w_lemmas)>0 and features[0]=='動詞' and features[6] in ['する','できる','出来る']\
                     and len(w_lemmas)!=0 and w_sub_poses[-1] in ['サ変接続']:
@@ -265,7 +265,7 @@ def tokenize(text, search_text)->list:
     i=1
     j=0 #文ごとのindex　0から振る
     for w_surface,w_class,class_detail,org,w_katsu in zip(w_surfaces,w_poses,w_sub_poses,w_lemmas,w_inflections):
-        if w_class=='記号' and w_surface=='|': #終末記号ごとにNo.記載
+        if w_surface=='|': #終末記号ごとにNo.記載
             sentence_nos.append("-")
             indexes_pertext.append("-")
             i=i+1 # text_no
@@ -278,14 +278,12 @@ def tokenize(text, search_text)->list:
             indexes_pertext.append(j)
             j=j+1
             
-## keyと取得したvalueから辞書型に変換
+    # transform to list of dict with each information as key and word information as value
     d=[] 
     i=0
-    #print('原形',w_lemmas)
-    #print('a',w_starts)
     keys=['index','index_pertext','surface','pos','sub_pos','lemma','inflection','text_no','sentiment','synonym','start_offset','end_offset','text_highlighted']
     for index_pertext,w_surface,w_class,w_class_detail,w_katsu,w_org,sen_no,w_start,w_end in zip(indexes_pertext,w_surfaces,w_poses,w_sub_poses,w_inflections,w_lemmas,sentence_nos,w_starts,w_ends):
-        if w_class=='記号' and w_surface=='|':
+        if w_surface=='|':
             pass
         elif w_class in ['名詞','動詞','形容詞','形容動詞','連体詞','接頭詞','助詞','助動詞','記号']:
             values=[i,index_pertext,w_surface,w_class,w_class_detail,w_org,w_katsu,sen_no,0,'',w_start,w_end,''] # w_index_pertext,sentimentは一旦全て0,synonymもすべて空白設定
