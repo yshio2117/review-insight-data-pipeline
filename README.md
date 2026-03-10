@@ -10,9 +10,14 @@ This project:
 3. Stores the processed results in BigQuery  
 4. Visualizes KPIs and negative reasons in Looker Studio  
 
-**Note:** Reviews are currently in Japanese; however, the pipeline is language-independent and can be applied to English or German datasets.
+<br/>
+
+**Note:** Reviews are currently in Japanese (MeCab + Japanese lexicons/rules).
+The pipeline architecture (ingest → validate → extract → load → BI) is not tied to a specific language, and the NLP extraction module is designed to be swappable per language (e.g., spaCy-based tokenization + lexicon for English/German).
 
 ## Demo / Output
+### Dashboard (Preview)
+![Looker Studio dashboard preview](docs/images/dashboard_page2_preview.png)
 
 - [Output PDF](docs/Report_on_Negative_Review_Reasons.pdf)
 - [Looker Studio dashboard](https://lookerstudio.google.com/reporting/a6186eaf-dfec-409e-91ba-79826297d478)
