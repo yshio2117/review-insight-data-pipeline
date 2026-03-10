@@ -15,8 +15,10 @@ This project:
 **Note:** Reviews are currently in Japanese (MeCab + Japanese lexicons/rules).
 The pipeline architecture (ingest → validate → extract → load → BI) is not tied to a specific language, and the NLP extraction module is designed to be swappable per language (e.g., spaCy-based tokenization + lexicon for English/German).
 
+<br/>
+
 ## Demo / Output
-### Dashboard (Preview)
+
 ![Looker Studio dashboard preview](docs/images/dashboard_page2_preview.png)
 
 - [Output PDF](docs/Report_on_Negative_Review_Reasons.pdf)
@@ -241,12 +243,7 @@ Run the pipeline locally in a Docker container with the command below. No GCP se
 make
 ```
 
-<br/>
 
-Note: The Docker image uses the default ipadic dictionary to keep the pipeline lightweight and reproducible.
-**mecab-ipadic-neologd, which offers improved extraction accuracy, is used only during development.**
-
-<br/>
 
 ### Alternative Setup (CLI / Native Environment)
 If you prefer to run the project without Docker, or want to use BigQuery output, follow the steps below to set up a local environment.
@@ -360,11 +357,21 @@ Uses a GCP service account via GitHub Secrets.
 
 Note: For production, prefer Workload Identity Federation (OIDC) instead of long-lived service account keys.
 
-### MeCab dictionary in CI
+<br/>
+
+## MeCab dictionary in this project
 For Japanese text processing, this project uses MeCab.
 
-#### Local development: 
-I use mecab-ipadic-neologd for improved tokenization.
+### Local development
+I use mecab-ipadic-neologd during development to explore tokenization improvements.
 
-#### CI environment: 
-the workflow uses the default ipadic dictionary to keep the pipeline lightweight and reproducible.
+### CI and Docker environment
+The workflow uses the default ipadic dictionary to keep the pipeline lightweight and reproducible.
+
+### Ongoing evaluation (ipadic vs. neologd)
+I’m currently evaluating which dictionary performs better for this task. In a small benchmark on the sample dataset, both dictionaries achieved similar overall extraction coverage, while neologd slightly improved issue-category coverage (+6pp in this dataset). Next, I plan to compare them using a small manually labeled set and report precision/recall, to avoid optimizing for coverage only.
+
+#### Dashboard snapshot (neologd)
+Below is a snapshot of the “Extracted Reasons Insights” dashboard generated using `mecab-ipadic-neologd` on the sample dataset.
+
+![Looker Studio dashboard preview](docs/images/dashboard_page2_preview_neologd.png)
