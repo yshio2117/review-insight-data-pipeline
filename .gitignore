@@ -8,3 +8,11 @@ __pycache__/
 .env
 *.log
 *.Zone.Identifier
+
+# ----- dbt (review_insights/)
+review_insights/.user.yml
+review_insights/profiles.yml
+review_insights/target/
+review_insights/dbt_packages/
+review_insights/dbt_modules/
+review_insights/logs/
