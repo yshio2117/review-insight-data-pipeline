@@ -1,0 +1,14 @@
+# profiles.yml
+review_insights:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      # load environment variables from .env
+      project: "{{ env_var('PROJECT_ID') }}"
+      dataset: "{{ env_var('DATASET_ID') }}"
+      threads: 1
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      timeout_seconds: 300
+      location: US
