@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: pipeline
+    database: "{{ env_var('PROJECT_ID') }}"
+    schema: "{{ env_var('DATASET_ID') }}"
+    tables:
+      - name: raw
+        identifier: "{{ env_var('TABLE_PREFIX', 'review') ~ '_raw' }}"
+
+      - name: validated
+        identifier: "{{ env_var('TABLE_PREFIX', 'review') ~ '_validated' }}"
+
+      - name: reasons
+        identifier: "{{ env_var('TABLE_PREFIX', 'review') ~ '_reasons' }}"
