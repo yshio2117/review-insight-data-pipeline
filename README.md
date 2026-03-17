@@ -62,6 +62,10 @@ flowchart LR
 ```
 
 Note: Negative lexicon credit: Japanese Sentiment Dictionary (Volume of Nouns) ver. 1.0, developed by the Inui–Okazaki Laboratory, Tohoku University.
+
+
+
+
 ## Dataset
 - Default source in this repo: Synthetic (dummy) reviews for a hotel (data/input/sample_thotel_reviews.csv)
   - The pipeline works with real-world reviews as well, as long as they follow the same CSV schema.
@@ -123,6 +127,18 @@ Implemented minimal checks for raw reveiws before loading to BigQuery:
 Note: Records that do not pass the quality check are flagged as `is_valid = False` and excluded from downstream processing. They can be monitored in the review_validated table.
 <br/>
 
+###  (In progress) dbt migration
+I am currently migrating part of the pipeline to dbt to make the quality checks (and the data transformations) more reproducible.
+
+So far, I have:
+
+- Added a data quality test to check that review_id is unique (no duplicates)
+
+Next steps:
+
+
+- Add more tests (e.g., not null, accepted values, timestamp format checks)
+- Move more validation/transformation logic into dbt models
 
 ## Extraction Logic (Rule-based)
 Goal: extract word-pairs like **(subject, predicate)** from a negative review.
