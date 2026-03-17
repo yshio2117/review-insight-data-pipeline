@@ -167,36 +167,6 @@ def load_validated_reviews_to_bq(reviews):
     print(f"Loaded validated reviews to : {review_validated_table}.")
 
 
-    # 2) dedup view（to get the latest ingested review for each review_id, and all invalid reviews with null review_id）
-    dedup_sql = f"""
-    CREATE OR REPLACE VIEW `{review_validated_table_dedup}` AS
-    WITH valid_dedup AS (
-      SELECT * EXCEPT(rn)
-      FROM (
-        SELECT
-          r.*,
-          ROW_NUMBER() OVER(
-            PARTITION BY review_id
-            ORDER BY ingested_at DESC, row_id DESC
-          ) AS rn
-        FROM `{review_validated_table}` r
-        WHERE review_id IS NOT NULL
-      )
-      WHERE rn = 1
-    ),
-    invalid_all AS (
-      SELECT * FROM `{review_validated_table}`
-      WHERE review_id IS NULL
-    )
-    SELECT * FROM valid_dedup
-    UNION ALL
-    SELECT * FROM invalid_all
-    """
-    q = client.query(dedup_sql)
-    q.result()
-    print(f"Created/Updated dedup view: {review_validated_table_dedup}.")
-
-
 
 def load_validated_reviews(validated_reviews, args, suffix="_validated"):
     """ Load validated reviews to BigQuery or local CSV based on args.output."""
