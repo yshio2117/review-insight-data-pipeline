@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: review_validated_dedup
+    description: "Deduplicated view of validated reviews."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - source
+            - source_id
+          config:
+            where: "review_id IS NOT NULL"
