@@ -2,6 +2,37 @@
 
 A lightweight DataOps-style pipeline for extracting negative review reasons using rule-based NLP, storing results in BigQuery, and visualizing KPIs in Looker Studio.
 
+## Table of Contents
+- [Overview](#overview)
+- [Demo (Dashboard & Output)](#demo-dashboard--output)
+- [Pipeline Architecture](#pipeline-architecture)
+- [Data Source & Schema](#data-source--schema)
+  - [Expected CSV schema](#expected-csv-schema)
+- [Data Model](#data-model)
+- [Data Quality & Validation](#data-quality--validation)
+  - [dbt migration](#in-progress-dbt-migration)
+- [NLP Extraction Logic (Rule-based)](#nlp-extraction-logic-rule-based)
+- [Categorization Logic](#categorization-logic)
+- [Manual Evaluation](#manual-evaluation-preliminary)
+- [Dashboard (Looker Studio)](#dashboard-looker-studio)
+- [Repo Structure](#repo-structure)
+- [Setup](#setup)
+  - [Quick Start (Recommended)](#quick-start-recommended)
+  - [Alternative Setup (CLI / Native Environment)](#alternative-setup-cli--native-environment)
+  - [Requirements](#requirements)
+  - [Prerequisites (Ubuntu / WSL2)](#prerequisites-ubuntu--wsl2)
+  - [Install Python dependencies](#install-python-dependencies)
+  - [Environment Variables](#environment-variables)
+  - [Run](#run)
+  - [How to create BigQuery Views](#how-to-create-bigquery-views)
+- [CI/CD (GitHub Actions)](#cicd-github-actions)
+  - [Steps](#steps)
+  - [Authentication](#authentication)
+- [Japanese Tokenization (MeCab Dictionaries)](#japanese-tokenization-mecab-dictionaries)
+  - [Local development](#local-development)
+  - [CI and Docker environment](#ci-and-docker-environment)
+
+
 ## Overview
 This project:
 
@@ -192,7 +223,7 @@ Note: The 'sentiment' column could be set to 'positive' when extracting positive
 
 <br/>
 
-## Manual evaluation (preliminary)
+## Manual Evaluation (preliminary)
 I evaluated the pipeline on 100 synthetic (AI-generated) Japanese reviews. After validation and deduplication, I manually checked correctness at three stages: (1) extraction, (2) entity mapping, and (3) issue-category mapping. Because label frequencies are imbalanced in this dataset, per-label recall is not available for some labels (support = 0; e.g., Entity: Price). <br/>
 I use these results to identify error patterns and to plan a targeted evaluation set for underrepresented labels.
 
