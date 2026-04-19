@@ -17,7 +17,7 @@ The pipeline architecture (ingest → validate → extract → load → BI) is n
 
 <br/>
 
-## Demo / Output
+## Demo (Dashboard & Output)
 
 ![Looker Studio dashboard preview](docs/images/dashboard_page2_preview.png)
 
@@ -26,7 +26,7 @@ The pipeline architecture (ingest → validate → extract → load → BI) is n
 
 
 
-## Architecture
+## Pipeline Architecture
 CSV → Python (cleaning + rule-based extraction + validation) → BigQuery → Looker Studio
 
 - Ingestion inputs: a local CSV file and lexicons used to detect negative terms and categorize extracted reasons.
@@ -66,7 +66,7 @@ Note: Negative lexicon credit: Japanese Sentiment Dictionary (Volume of Nouns) v
 
 
 
-## Dataset
+## Data Source & Schema
 - Default source in this repo: Synthetic (dummy) reviews for a hotel (data/input/sample_thotel_reviews.csv)
   - The pipeline works with real-world reviews as well, as long as they follow the same CSV schema.
 
@@ -115,7 +115,7 @@ and can be modified via `config/settings.py`.
 
 
 
-## Data Quality Checks
+## Data Quality & Validation
 Implemented minimal checks for raw reveiws before loading to BigQuery:
 - required column presence(`source_id`, `source`, `review_text`, and `posted_at`).
 - duplicate `reviews` detection: check whether `source_id` and `source` are the same. if so, we consider them to be the duplicated reviews.
@@ -140,7 +140,7 @@ Next steps:
 - Add more tests (e.g., not null, accepted values, timestamp format checks)
 - Move more validation/transformation logic into dbt models
 
-## Extraction Logic (Rule-based)
+## NLP Extraction Logic (Rule-based)
 Goal: extract word-pairs like **(subject, predicate)** from a negative review.
 
 Current rule examples: First, we detect negative terms in each review using the negative lexicon, then extract the paired subject and/or predicate from the same sentence using the rules below:
@@ -157,12 +157,35 @@ Output fields:
 
 
 Limitations:
-- Cannot extract(detect) reasons from 'contextually negative texts' that don’t contain any negative words. (e.g., "隣の部屋から音が聞こえました"("I heard people talking in the next room."))
-- Multiple reason pairs can be extracted from one review, but they may not represent different problems: they might describe the same issue using different wording (e.g., S1: Linen / P1: Dirty , S2: Towel / P2: Unpleasant).
-- The extracted subject may include multiple tokens and some unnecessary words, since it is difficult to isolate a single subject with the current word-level logic. (e.g., S:['東京'(Tokyo),'ホテル'(hotel),'リネン'(linen)], P:'汚い(dirty)'). To imporove this, we may need deeper analysis as semantic parsing.
+- Rule-based extraction; quality depends on lexicons and rules.
+- Currently supports Japanese only (MeCab + Japanese lexicons / rules).
+- Cannot extract (detect) reasons from 'contextually negative texts' that don’t contain any negative words. (e.g., "隣の部屋から音が聞こえました"("I heard people talking in the next room."))
+- The pipeline can extract multiple tuples from one review. However, some tuples may describe the same issue using different wording (e.g., Linen - Dirty vs. Towel - Unpleasant).
+- For the dashboard and evaluation, I keep only one “canonical” reason per review (the tuple with the highest confidence). Therefore, reviews with multiple distinct issues may be under-represented.
 
 
-## Categorizing logic
+## Manual evaluation (preliminary)
+I evaluated the pipeline on 100 synthetic (AI-generated) Japanese reviews. After validation and deduplication, I manually checked correctness at three stages: (1) extraction, (2) entity mapping, and (3) issue-category mapping. Because label frequencies are imbalanced in this dataset, per-label recall is not available for some labels (support = 0; e.g., Entity: Price). <br/>
+I use these results to identify error patterns and to plan a targeted evaluation set for underrepresented labels.
+
+Evaluation results:
+| Metric                                     | Value | definition                                                            |
+|--------------------------------------------|-------|-----------------------------------------------------------------------|
+| Extraction coverage                        | 0.81  | #records with ≥1 extracted tuple / #valid test records                |
+| Extraction precision (review-level)        | 0.67  | #records with correct extraction / #records with ≥1 extracted tuple   |
+| Entity mapping accuracy (given extraction) | 0.6   | #records with correct entity label / #records with ≥1 extracted tuple |
+| Issue-category accuracy (given extraction) | 0.42  | #records with correct issue label / #records with ≥1 extracted tuple  |
+
+<br/>
+Note:
+
+- This evaluation uses synthetic data; performance on real-world reviews may differ due to noise and distribution shift.
+- “Correct extraction” means that at least one extracted tuple matches the main negative reason in the review (review-level evaluation).
+- See [Per-label precision/recall with support counts](docs/images/per-label_precision_recall.png)
+
+<br/>
+
+## Categorization Logic
 Goal: categorize the extracted reasons into **Entity** and **Issue** using the customizable lexicons. 
 
 **Entity:** subject(s) are expected to be matched to one entity which defined in entity_lexicon.csv
@@ -375,7 +398,7 @@ Note: For production, prefer Workload Identity Federation (OIDC) instead of long
 
 <br/>
 
-## MeCab dictionary in this project
+## Japanese Tokenization (MeCab Dictionaries) 
 For Japanese text processing, this project uses MeCab.
 
 ### Local development
