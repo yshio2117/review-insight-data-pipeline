@@ -164,27 +164,6 @@ Limitations:
 - For the dashboard and evaluation, I keep only one “canonical” reason per review (the tuple with the highest confidence). Therefore, reviews with multiple distinct issues may be under-represented.
 
 
-## Manual evaluation (preliminary)
-I evaluated the pipeline on 100 synthetic (AI-generated) Japanese reviews. After validation and deduplication, I manually checked correctness at three stages: (1) extraction, (2) entity mapping, and (3) issue-category mapping. Because label frequencies are imbalanced in this dataset, per-label recall is not available for some labels (support = 0; e.g., Entity: Price). <br/>
-I use these results to identify error patterns and to plan a targeted evaluation set for underrepresented labels.
-
-Evaluation results:
-| Metric                                     | Value | definition                                                            |
-|--------------------------------------------|-------|-----------------------------------------------------------------------|
-| Extraction coverage                        | 0.81  | #records with ≥1 extracted tuple / #valid test records                |
-| Extraction precision (review-level)        | 0.67  | #records with correct extraction / #records with ≥1 extracted tuple   |
-| Entity mapping accuracy (given extraction) | 0.6   | #records with correct entity label / #records with ≥1 extracted tuple |
-| Issue-category accuracy (given extraction) | 0.42  | #records with correct issue label / #records with ≥1 extracted tuple  |
-
-<br/>
-Note:
-
-- This evaluation uses synthetic data; performance on real-world reviews may differ due to noise and distribution shift.
-- “Correct extraction” means that at least one extracted tuple matches the main negative reason in the review (review-level evaluation).
-- See [Per-label precision/recall with support counts](docs/images/per-label_precision_recall.png)
-
-<br/>
-
 ## Categorization Logic
 Goal: categorize the extracted reasons into **Entity** and **Issue** using the customizable lexicons. 
 
@@ -210,6 +189,29 @@ Excerpt: issue_lexicon.csv
 
 Note: The 'sentiment' column could be set to 'positive' when extracting positive reasons instead of negative ones (currently not implemented).
 
+
+<br/>
+
+## Manual evaluation (preliminary)
+I evaluated the pipeline on 100 synthetic (AI-generated) Japanese reviews. After validation and deduplication, I manually checked correctness at three stages: (1) extraction, (2) entity mapping, and (3) issue-category mapping. Because label frequencies are imbalanced in this dataset, per-label recall is not available for some labels (support = 0; e.g., Entity: Price). <br/>
+I use these results to identify error patterns and to plan a targeted evaluation set for underrepresented labels.
+
+Evaluation results:
+| Metric                                     | Value | definition                                                            |
+|--------------------------------------------|-------|-----------------------------------------------------------------------|
+| Extraction coverage                        | 0.81  | #records with ≥1 extracted tuple / #valid test records                |
+| Extraction precision (review-level)        | 0.67  | #records with correct extraction / #records with ≥1 extracted tuple   |
+| Entity mapping accuracy (given extraction) | 0.6   | #records with correct entity label / #records with ≥1 extracted tuple |
+| Issue-category accuracy (given extraction) | 0.42  | #records with correct issue label / #records with ≥1 extracted tuple  |
+
+<br/>
+Note:
+
+- This evaluation uses synthetic data; performance on real-world reviews may differ due to noise and distribution shift.
+- “Correct extraction” means that at least one extracted tuple matches the main negative reason in the review (review-level evaluation).
+- See [Per-label precision/recall with support counts](docs/images/per-label_precision_recall.png)
+
+<br/>
 
 
 ## Dashboard (Looker Studio)
